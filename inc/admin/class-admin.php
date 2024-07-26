@@ -4,6 +4,7 @@ namespace Review_Store\Inc\Admin;
 
 // use const Review_Store\NS;
 use const Review_Store\PLUGIN_ADMIN_VIEWS_DIR;
+use Review_Store\Inc\Database\Database;
 
 /**
  * The admin-specific functionality of the plugin.
@@ -22,6 +23,7 @@ class Admin
 	private $plugin_name;
 	private $version;
 	private $plugin_text_domain;
+	private $db;
 
 	public function __construct($plugin_name, $version, $plugin_text_domain)
 	{
@@ -29,6 +31,7 @@ class Admin
 		$this->version = $version;
 		$this->plugin_text_domain = $plugin_text_domain;
 		add_action('admin_menu', array($this, 'urp_admin_menu'));
+		$this->db = Database::get_instance();
 	}
 
 	public function enqueue_styles()
@@ -119,4 +122,73 @@ class Admin
 	{
 		include_once PLUGIN_ADMIN_VIEWS_DIR . $this->plugin_name . '-admin-user-reviews-display.php';
 	}
+
+
+	// public function insert_review($external_profile_id, $reviewer_user_id, $rating)
+	// {
+	// 	$data = [
+	// 		'external_profile_id' => $external_profile_id,
+	// 		'reviewer_user_id' => $reviewer_user_id,
+	// 		'rating' => $rating,
+	// 		'status' => 'pending',
+	// 		'created_at' => current_time('mysql'),
+	// 		'updated_at' => current_time('mysql')
+	// 	];
+	// 	$review_id = $this->db->insert('reviews', $data);
+	// 	return $review_id;
+	// }
+
+	// public function delete_review($review_id)
+	// {
+	// 	$where = ['review_id' => $review_id];
+	// 	return $this->db->delete('reviews', $where);
+	// }
+
+	// public function update_review($review_id, $data)
+	// {
+	// 	$where = ['review_id' => $review_id];
+	// 	return $this->db->update('reviews', $data, $where);
+	// }
+
+	// public function get_review($review_id)
+	// {
+	// 	$where = ['review_id' => $review_id];
+	// 	return $this->db->get('reviews', $where);
+	// }
+
+	// Example of using Database class for inserting a new review
+	// public function insert_review($external_profile_id, $reviewer_user_id, $rating)
+	// {
+	// 	$data = [
+	// 		'external_profile_id' => $external_profile_id,
+	// 		'reviewer_user_id' => $reviewer_user_id,
+	// 		'rating' => $rating,
+	// 		'status' => 'pending',
+	// 		'created_at' => current_time('mysql'),
+	// 		'updated_at' => current_time('mysql')
+	// 	];
+	// 	$review_id = Database::insert('reviews', $data);
+	// 	return $review_id;
+	// }
+
+	// // Example of using Database class for deleting a review
+	// public function delete_review($review_id)
+	// {
+	// 	$where = ['review_id' => $review_id];
+	// 	return Database::delete('reviews', $where);
+	// }
+
+	// // Example of using Database class for updating a review
+	// public function update_review($review_id, $data)
+	// {
+	// 	$where = ['review_id' => $review_id];
+	// 	return Database::update('reviews', $data, $where);
+	// }
+
+	// // Example of using Database class for getting a review
+	// public function get_review($review_id)
+	// {
+	// 	$where = ['review_id' => $review_id];
+	// 	return Database::get('reviews', $where);
+	// }
 }

@@ -3,6 +3,20 @@ namespace Review_Store\Inc\Database;
 
 class Database
 {
+    private static $instance = null;
+
+    private function __construct()
+    {
+        // private constructor to prevent direct instantiation
+    }
+
+    public static function get_instance()
+    {
+        if (self::$instance === null) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
 
     /**
      * Check if a table exists in the database.
@@ -140,18 +154,19 @@ class Database
     /**
      * Get data from a table.
      */
-    public static function get($table, $where = [], $output = OBJECT)
+    public function get($table, $where)
     {
         global $wpdb;
-        $table_name = $wpdb->prefix . $table;
-        $query = "SELECT * FROM $table_name";
-        if (!empty($where)) {
-            $conditions = array_map(function ($key) {
-                return "$key = %s";
-            }, array_keys($where));
-            $query .= " WHERE " . implode(' AND ', $conditions);
-            return $wpdb->get_results($wpdb->prepare($query, array_values($where)), $output);
+        $sql = "SELECT * FROM {$wpdb->prefix}{$table} WHERE " . self::build_where_clause($where);
+        return $wpdb->get_row($sql);
+    }
+
+    private function build_where_clause($where)
+    {
+        $clauses = [];
+        foreach ($where as $key => $value) {
+            $clauses[] = "$key = '$value'";
         }
-        return $wpdb->get_results($query, $output);
+        return implode(' AND ', $clauses);
     }
 }
