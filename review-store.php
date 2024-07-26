@@ -42,10 +42,15 @@ define(NS . 'PLUGIN_NAME_URL', plugin_dir_url(__FILE__));
 define(NS . 'PLUGIN_BASENAME', plugin_basename(__FILE__));
 define(NS . 'PLUGIN_TEXT_DOMAIN', 'review-store');
 
+
+// New constants for admin directories
+define(NS . 'PLUGIN_ADMIN_DIR', PLUGIN_NAME_DIR . 'inc/admin/');
+define(NS . 'PLUGIN_ADMIN_VIEWS_DIR', PLUGIN_ADMIN_DIR . 'views/');
+
 /**
  * Autoload Classes
  */
-require_once PLUGIN_NAME_DIR . 'includes/libraries/autoloader.php';
+require_once PLUGIN_NAME_DIR . 'Inc/libraries/autoloader.php';
 
 /**
  * Register Activation and Deactivation Hooks

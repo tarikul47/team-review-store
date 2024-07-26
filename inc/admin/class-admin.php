@@ -2,6 +2,9 @@
 
 namespace Review_Store\Inc\Admin;
 
+// use const Review_Store\NS;
+use const Review_Store\PLUGIN_ADMIN_VIEWS_DIR;
+
 /**
  * The admin-specific functionality of the plugin.
  *
@@ -13,97 +16,116 @@ namespace Review_Store\Inc\Admin;
  *
  * @author    Your Name or Your Company
  */
-class Admin {
+class Admin
+{
 
-	/**
-	 * The ID of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $plugin_name    The ID of this plugin.
-	 */
 	private $plugin_name;
-
-	/**
-	 * The version of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $version    The current version of this plugin.
-	 */
 	private $version;
-
-	/**
-	 * The text domain of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $plugin_text_domain    The text domain of this plugin.
-	 */
 	private $plugin_text_domain;
 
-	/**
-	 * Initialize the class and set its properties.
-	 *
-	 * @since       1.0.0
-	 * @param       string $plugin_name        The name of this plugin.
-	 * @param       string $version            The version of this plugin.
-	 * @param       string $plugin_text_domain The text domain of this plugin.
-	 */
-	public function __construct( $plugin_name, $version, $plugin_text_domain ) {
-
+	public function __construct($plugin_name, $version, $plugin_text_domain)
+	{
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 		$this->plugin_text_domain = $plugin_text_domain;
-
-		//var_dump('Hello admin -------------');
-		//die();
-
+		add_action('admin_menu', array($this, 'urp_admin_menu'));
 	}
 
-	/**
-	 * Register the stylesheets for the admin area.
-	 *
-	 * @since    1.0.0
-	 */
-	public function enqueue_styles() {
-
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
-
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wp-plugin-name-admin.css', array(), $this->version, 'all' );
-
+	public function enqueue_styles()
+	{
+		wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/wp-plugin-name-admin.css', array(), $this->version, 'all');
 	}
 
-	/**
-	 * Register the JavaScript for the admin area.
-	 *
-	 * @since    1.0.0
-	 */
-	public function enqueue_scripts() {
-		/*
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
-
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wp-plugin-name-admin.js', array( 'jquery' ), $this->version, false );
-
+	public function enqueue_scripts()
+	{
+		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/wp-plugin-name-admin.js', array('jquery'), $this->version, false);
 	}
 
+	public function urp_admin_menu()
+	{
+		add_menu_page(
+			__('Review Store', $this->plugin_text_domain),
+			__('Review Store', $this->plugin_text_domain),
+			'manage_options',
+			$this->plugin_name,
+			array($this, 'urp_user_list_page'),
+			'dashicons-admin-generic',
+			6
+		);
+
+		add_submenu_page(
+			$this->plugin_name,
+			__('Edit User', $this->plugin_text_domain),
+			__('Edit User', $this->plugin_text_domain),
+			'manage_options',
+			$this->plugin_name . '-edit-user',
+			array($this, 'urp_edit_user_page')
+		);
+
+		add_submenu_page(
+			$this->plugin_name,
+			__('Add User', $this->plugin_text_domain),
+			__('Add User', $this->plugin_text_domain),
+			'manage_options',
+			$this->plugin_name . '-add-user',
+			array($this, 'urp_add_user_page')
+		);
+
+		add_submenu_page(
+			$this->plugin_name,
+			__('Review List', $this->plugin_text_domain),
+			__('Review List', $this->plugin_text_domain),
+			'manage_options',
+			$this->plugin_name . '-review-list',
+			array($this, 'urp_review_list_page')
+		);
+
+		add_submenu_page(
+			$this->plugin_name,
+			__('Approve Reviews', $this->plugin_text_domain),
+			__('Approve Reviews', $this->plugin_text_domain),
+			'manage_options',
+			$this->plugin_name . '-approve-reviews',
+			array($this, 'urp_approve_reviews_page')
+		);
+
+		add_submenu_page(
+			$this->plugin_name,
+			__('User Reviews', $this->plugin_text_domain),
+			__('User Reviews', $this->plugin_text_domain),
+			'manage_options',
+			$this->plugin_name . '-user-reviews',
+			array($this, 'urp_user_reviews_page')
+		);
+	}
+
+	public function urp_user_list_page()
+	{
+		include_once PLUGIN_ADMIN_VIEWS_DIR . $this->plugin_name . '-admin-user-list-display.php';
+	}
+
+	public function urp_edit_user_page()
+	{
+		include_once PLUGIN_ADMIN_VIEWS_DIR . $this->plugin_name . '-admin-edit-user-display.php';
+	}
+
+	public function urp_add_user_page()
+	{
+		include_once PLUGIN_ADMIN_VIEWS_DIR . $this->plugin_name . '-admin-add-user-display.php';
+	}
+
+	public function urp_review_list_page()
+	{
+		include_once PLUGIN_ADMIN_VIEWS_DIR . $this->plugin_name . '-admin-review-list-display.php';
+	}
+
+	public function urp_approve_reviews_page()
+	{
+		include_once PLUGIN_ADMIN_VIEWS_DIR . $this->plugin_name . '-admin-approve-reviews-display.php';
+	}
+
+	public function urp_user_reviews_page()
+	{
+		include_once PLUGIN_ADMIN_VIEWS_DIR . $this->plugin_name . '-admin-user-reviews-display.php';
+	}
 }
