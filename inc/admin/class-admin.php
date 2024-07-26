@@ -88,15 +88,6 @@ class Admin
 			$this->plugin_name . '-approve-reviews',
 			array($this, 'urp_approve_reviews_page')
 		);
-
-		add_submenu_page(
-			$this->plugin_name,
-			__('User Reviews', $this->plugin_text_domain),
-			__('User Reviews', $this->plugin_text_domain),
-			'manage_options',
-			$this->plugin_name . '-user-reviews',
-			array($this, 'urp_user_reviews_page')
-		);
 	}
 
 	public function urp_user_list_page()
