@@ -77,9 +77,12 @@ spl_autoload_register(function ($class_name) {
 	}
 });
 
-
 // Include mPDF if it's not already included
-// if (!class_exists('Mpdf\Mpdf')) {
-// 	//var_dump($class_name);
-// 	require_once plugin_dir_path(dirname(__DIR__)) . 'inc/libraries/mpdf/mpdf.php';
-// }
+if (!class_exists('Mpdf\Mpdf')) {
+
+	//var_dump(!class_exists('Mpdf\Mpdf'));
+	
+	//require_once plugin_dir_path(dirname(__DIR__)) . 'inc/libraries/mpdf/mpdf/src/Mpdf.php';
+
+	//var_dump(!class_exists('Mpdf\Mpdf'));
+}
